@@ -18,7 +18,7 @@ def get_sql_context_instance(spark_context):
 def process_rdd(time, rdd):
     print("----------- %s -----------" % str(time))
     try:
-        # Get spark sql singleton context from the current context
+        # Get spark sql singleton context from the current contextsdqgqqsgsqg
         sql_context = get_sql_context_instance(rdd.context)
         # convert the RDD to Row RDD
         row_rdd = rdd.map(lambda w: Row(hashtag=w[0], hashtag_count=w[1]))
@@ -63,6 +63,7 @@ dataStream = ssc.socketTextStream("localhost", 9009)
 
 # split each tweet into words
 words = dataStream.flatMap(lambda line: line.split(" "))
+print(words)
 # filter the words to get only hashtags, then map each hashtag to be a pair of (hashtag,1)
 hashtags = words.filter(lambda w: '#' in w).map(lambda x: (x, 1))
 # adding the count of each hashtag to its last count

@@ -63,7 +63,7 @@ class StreamUpdate(mastodon.StreamListener):
         # print(status)
         json_toot = status
         try:
-            toot_text = replace_entities(replace_tags(json_toot['content']))
+            toot_text = str(replace_entities(replace_tags(json_toot['content'])))
             print("Toot Text: " + toot_text)
             print("------------------------------------------")
             tcp_connection.send(toot_text + '\n')

@@ -64,6 +64,7 @@ class StreamUpdate(mastodon.StreamListener):
         try:
             toot_text = replace_entities(replace_tags(json_toot['content']))
             print("Toot Text: " + toot_text)
+            print(toot_text.encode('utf-8'))
             print("------------------------------------------")
             # tcp_connection.send(toot_text + '\n')
         except:

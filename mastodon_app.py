@@ -66,7 +66,9 @@ class StreamUpdate(mastodon.StreamListener):
             toot_text = str(replace_entities(replace_tags(json_toot['content'])))
             print("Toot Text: " + toot_text)
             print("------------------------------------------")
-            tcp_connection.send(toot_text + '\n')
+            message = toot_text + '\n'
+            tcp_connection.sendto(message.encode('utf-8'))
+
         except:
             e = sys.exc_info()[0]
             print("Error: %s" % e)

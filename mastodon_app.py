@@ -1,8 +1,11 @@
+# coding: utf-8
+
 import socket
 import sys
 import requests
 import requests_oauthlib
 import json
+from w3lib.html import replace_entities, replace_tags
 import mastodon
 from mastodon import Mastodon
 
@@ -33,17 +36,51 @@ api = Mastodon(
 )
 api.log_in(
     'f.marsault@protonmail.com',
-    '4fxB$666m',
+    'randompasswordFITEC',
 )
 
 
+class StreamUpdate(mastodon.StreamListener):
+
+    def on_update(self, status):
+        """A new status has appeared! 'status' is the parsed JSON dictionary
+        describing the status."""
+        json_toot = status
+        # print(json_toot)
+        return json_toot
+
+
 def get_toots():
-    url = 'https://mastodon.social/api/v1/streaming/public'
-    listener = mastodon.StreamListener()
-    stream = api.stream_public(listener, async=False)
-    print(stream)
-    return stream
+    # url = 'https://mastodon.social/api/v1/streaming/public'
+    listener = StreamUpdate()
+    api.stream_public(listener, async=False)
 
 
-stream = get_toots()
+def send_toots_to_spark(json_toot, tcp_connection):
+    try:
+        toot_text = replace_entities(replace_tags(json_toot['content']))
+        print("Toot Text: " + toot_text)
+        print ("------------------------------------------")
+        tcp_connection.send(toot_text + '\n')
+    except:
+        e = sys.exc_info()[0]
+        print("Error: %s" % e)
 
+TCP_IP = "localhost"
+TCP_PORT = 4444
+conn = None
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((TCP_IP, TCP_PORT))
+s.listen(1)
+print("Waiting for TCP connection...")
+conn, addr = s.accept()
+print("Connected... Starting getting tweets.")
+json_toot = get_toots()
+send_toots_to_spark(json_toot,conn)
+
+
+
+# This works as intended, which means I manage to connect to my account and use the api
+# post = 'try123'
+# print("Posting " + post)
+# api.toot(post)

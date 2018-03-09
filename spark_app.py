@@ -59,7 +59,7 @@ ssc = StreamingContext(sc, 4)
 # setting a checkpoint to allow RDD recovery
 ssc.checkpoint("checkpoint_MastodonApp")
 # read data from port 4444
-dataStream = ssc.socketTextStream("localhost", 4444)
+dataStream = ssc.socketTextStream("localhost", 9009)
 
 # split each tweet into words
 words = dataStream.flatMap(lambda line: line.split(" "))

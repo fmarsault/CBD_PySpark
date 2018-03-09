@@ -27,12 +27,12 @@ Mastodon.create_app(
 # Log in - either every time, or use persisted
 
 api = Mastodon(
-    client_id = 'b6e91ac10bb933c2e590722d31501510b373ecd4649199f498608caf2eeacb30',
-    client_secret = '6165c057a087f2cd461550105760e7c876163ce5a6e55e5c1fa0a215938a7524',
-    access_token = 'dc44837f9accdd185fbfee7597e1bba57c5d67c25798349ffec1240b1af8b70e',
-    api_base_url = 'https://mastodon.social',
-    ratelimit_method = "pace",
-    debug_requests=True,
+    client_id='b6e91ac10bb933c2e590722d31501510b373ecd4649199f498608caf2eeacb30',
+    client_secret='6165c057a087f2cd461550105760e7c876163ce5a6e55e5c1fa0a215938a7524',
+    access_token='dc44837f9accdd185fbfee7597e1bba57c5d67c25798349ffec1240b1af8b70e',
+    api_base_url='https://mastodon.social',
+    ratelimit_method="pace",
+    debug_requests=False,
 )
 api.log_in(
     'f.marsault@protonmail.com',
@@ -40,47 +40,41 @@ api.log_in(
 )
 
 
+def tcp():
+    TCP_IP = "localhost"
+    TCP_PORT = 4444
+    conn = None
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((TCP_IP, TCP_PORT))
+    s.listen(1)
+    print("Waiting for TCP connection...")
+    conn, addr = s.accept()
+    print("Connected... Starting getting tweets.")
+    return conn
+
+
 class StreamUpdate(mastodon.StreamListener):
 
     def on_update(self, status):
         """A new status has appeared! 'status' is the parsed JSON dictionary
         describing the status."""
+        print(status)
         json_toot = status
-        # print(json_toot)
-        return json_toot
+        try:
+            tcp_connection = tcp()
+            toot_text = replace_entities(replace_tags(json_toot['content']))
+            print("Toot Text: " + toot_text)
+            print("------------------------------------------")
+            tcp_connection.send(toot_text + '\n')
+        except:
+            e = sys.exc_info()[0]
+            print("Error: %s" % e)
 
 
-def get_toots():
+def get_send_toots():
     # url = 'https://mastodon.social/api/v1/streaming/public'
     listener = StreamUpdate()
     api.stream_public(listener, async=False)
 
 
-def send_toots_to_spark(json_toot, tcp_connection):
-    try:
-        toot_text = replace_entities(replace_tags(json_toot['content']))
-        print("Toot Text: " + toot_text)
-        print ("------------------------------------------")
-        tcp_connection.send(toot_text + '\n')
-    except:
-        e = sys.exc_info()[0]
-        print("Error: %s" % e)
-
-TCP_IP = "localhost"
-TCP_PORT = 4444
-conn = None
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((TCP_IP, TCP_PORT))
-s.listen(1)
-print("Waiting for TCP connection...")
-conn, addr = s.accept()
-print("Connected... Starting getting tweets.")
-json_toot = get_toots()
-send_toots_to_spark(json_toot,conn)
-
-
-
-# This works as intended, which means I manage to connect to my account and use the api
-# post = 'try123'
-# print("Posting " + post)
-# api.toot(post)
+json_toot = get_send_toots()

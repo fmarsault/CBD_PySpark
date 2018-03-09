@@ -59,7 +59,7 @@ class StreamUpdate(mastodon.StreamListener):
     def on_update(self, status):
         """A new status has appeared! 'status' is the parsed JSON dictionary
         describing the status."""
-        tcp_connection = tcp()
+        # tcp_connection = tcp()
         # print(status)
         json_toot = status
         try:
@@ -74,6 +74,8 @@ class StreamUpdate(mastodon.StreamListener):
 
 def get_send_toots():
     # url = 'https://mastodon.social/api/v1/streaming/public'
+    tcp_connection = tcp()
+    global tcp_connection
     listener = StreamUpdate()
     api.stream_public(listener, async=False)
 

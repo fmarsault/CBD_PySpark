@@ -67,7 +67,7 @@ class StreamUpdate(mastodon.StreamListener):
             print("Toot Text: " + toot_text)
             print("------------------------------------------")
             message = toot_text + '\n'
-            tcp_connection.sendto(message.encode('utf-8'))
+            tcp_connection.sendto(message.encode('utf-8'),("localhost", 9009))
 
         except:
             e = sys.exc_info()[0]

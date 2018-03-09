@@ -63,11 +63,11 @@ dataStream = ssc.socketTextStream("localhost", 9009)
 
 # split each tweet into words
 words = dataStream.flatMap(lambda line: line.split(" "))
-print(words)
+print(str(words))
 # filter the words to get only hashtags, then map each hashtag to be a pair of (hashtag,1)
-hashtags = words.filter(lambda w: '#' in w).map(lambda x: (x, 1))
+# hashtags = words.filter(lambda w: '#' in w).map(lambda x: (x, 1))
 # adding the count of each hashtag to its last count
-tags_totals = hashtags.updateStateByKey(aggregate_tags_count)
+tags_totals = words.updateStateByKey(aggregate_tags_count)
 # do processing for each RDD generated in each interval
 tags_totals.foreachRDD(process_rdd)
 # start the streaming computation

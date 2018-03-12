@@ -41,7 +41,7 @@ def process_rdd(time, rdd):
             for x in hashtag_counts_df.collect():
                 print(x.hashtag, x.hashtag_count)
             # hashtag_counts_df.show(truncate=False)
-        hashtag_counts_df.write.save("/user/hadoop2/mostusedtoots.parquet")
+            hashtag_counts_df.write.save("/user/hadoop2/mostusedtoots.parquet")
         except:
             e = sys.exc_info()[0]
             print("Error5: %s" % e)

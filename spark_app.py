@@ -88,7 +88,7 @@ words = dataStream.flatMap(lambda line: tokenizer.tokenize(line))
 # hashtags = words.filter(lambda w: '#' in w).map(lambda x: (x, 1))
 # map each word to be a pair of (word,1)
 stopwords_combined = stopwords.words('english') + stopwords.words('french') + stopwords.words('spanish')\
-                                     + stopwords.words('german')
+                                     + stopwords.words('german') + [r'http*', 'com', 'www', r'\d+$', 'url', 'status']
 wordsc = words.filter(lambda w: w.lower() not in stopwords_combined).map(lambda x: (x, 1))
 # adding the count of each hashtag to its last count
 tags_totals = wordsc.updateStateByKey(aggregate_tags_count)

@@ -63,7 +63,7 @@ dataStream = ssc.socketTextStream("localhost", 9009)
 
 # split each tweet into words
 words = dataStream.flatMap(lambda line: line.split(" "))
-print(str(words))
+# print(str(words))
 # filter the words to get only hashtags, then map each hashtag to be a pair of (hashtag,1)
 # hashtags = words.filter(lambda w: '#' in w).map(lambda x: (x, 1))
 # adding the count of each hashtag to its last count

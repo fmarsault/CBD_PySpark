@@ -34,7 +34,7 @@ def process_rdd(time, rdd):
             print("Error1: %s" % e)
         try:
             # convert the RDD to Row RDD
-            row_rdd = rdd.map(lambda w: Row(hashtag=w[0].encode('utf-8'), hashtag_count=w[1]))
+            row_rdd = rdd.map(lambda w: Row(hashtag=w[0], hashtag_count=w[1]))
         except:
             e = sys.exc_info()[0]
             print("Error2: %s" % e)

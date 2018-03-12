@@ -7,6 +7,9 @@ from pyspark.sql import Row, SQLContext
 import sys
 import requests
 from nltk.corpus import stopwords
+import nltk
+
+nltk.download('stopwords')
 
 
 def aggregate_tags_count(new_values, total_sum):

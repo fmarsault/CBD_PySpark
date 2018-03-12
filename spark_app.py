@@ -54,7 +54,7 @@ def process_rdd(time, rdd):
             print("Error4: %s" % e)
         try:
             # get the top 10 hashtags from the table using SQL and print them
-            f = udf(lambda x: x.encode('utf-8'), StringType())
+            # f = udf(lambda x: x.encode('utf-8'), StringType())
             # hashtag_counts_df = sql_context.sql(
             #     "select hashtag, hashtag_count from hashtags order by hashtag_count desc limit 10".format(hashtags_df))
             hashtag_counts_df = sql_context.table("hashtags").select('hashtag','hashtag_count')\

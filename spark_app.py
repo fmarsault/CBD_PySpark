@@ -41,15 +41,16 @@ def process_rdd(time, rdd):
             for x in hashtag_counts_df.collect():
                 print(x.hashtag, x.hashtag_count)
             # hashtag_counts_df.show(truncate=False)
+        hashtag_counts_df.write.save("/user/haddop2/mostusedtoots.parquet")
         except:
             e = sys.exc_info()[0]
             print("Error5: %s" % e)
-        try:
-            # call this method to prepare top 10 hashtags DF and send them
-            send_df_to_dashboard(hashtag_counts_df)
-        except:
-            e = sys.exc_info()[0]
-            print("Error6: %s" % e)
+        # try:
+        #     # call this method to prepare top 10 hashtags DF and send them
+        #     send_df_to_dashboard(hashtag_counts_df)
+        # except:
+        #     e = sys.exc_info()[0]
+        #     print("Error6: %s" % e)
     except:
         e = sys.exc_info()[0]
         print("ErrorAll: %s" % e)

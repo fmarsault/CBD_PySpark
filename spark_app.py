@@ -39,7 +39,7 @@ def process_rdd(time, rdd):
             hashtag_counts_df = sql_context.sql(
                 "select hashtag, hashtag_count from hashtags order by hashtag_count desc limit 10".format(hashtags_df))
             for x in hashtag_counts_df.collect():
-                print(x.hashtag, x.hashtag_count)
+                print(x.hashtag.encode("utf-8"), x.hashtag_count)
             hashtag_counts_df.show(truncate=False)
         except:
             e = sys.exc_info()[0]

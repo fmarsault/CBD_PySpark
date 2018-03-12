@@ -57,8 +57,8 @@ def process_rdd(time, rdd):
             f = udf(lambda x: x.encode('utf-8'), StringType())
             # hashtag_counts_df = sql_context.sql(
             #     "select hashtag, hashtag_count from hashtags order by hashtag_count desc limit 10".format(hashtags_df))
-            hashtag_counts_df = sql_context.table("hashtags").select(f('hashtag'))
-            hashtag_counts_df.show()
+            hashtag_counts_df = sql_context.table("hashtags").select(f('hashtag')).show(False)
+            # hashtag_counts_df.show(10, False)
             for x in hashtag_counts_df.collect():
                 print(x)
 

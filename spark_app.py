@@ -76,7 +76,7 @@ words = dataStream.flatMap(lambda line: line.split(" "))
 # map each word to be a pair of (word,1)
 stopwords_combined = stopwords.words('english') + stopwords.words('french') + stopwords.words('spanish')\
                                      + stopwords.words('german')
-wordsc = words.filter(lambda w: w not in stopwords_combined).map(lambda x: (x, 1))
+wordsc = words.filter(lambda w: w.lower() not in stopwords_combined).map(lambda x: (x, 1))
 # adding the count of each hashtag to its last count
 tags_totals = wordsc.updateStateByKey(aggregate_tags_count)
 # do processing for each RDD generated in each interval

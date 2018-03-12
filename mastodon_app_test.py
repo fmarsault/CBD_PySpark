@@ -62,7 +62,7 @@ class StreamUpdate(mastodon.StreamListener):
         # tcp_connection = tcp()
         json_toot = status
         try:
-            if status['language'] in ['en', 'fr', 'None', 'es']:
+            if status['language'] in ['en', 'fr', 'None', 'es', 'de']:
                 toot_text = str(replace_entities(replace_tags(json_toot['content'])))
                 print("Toot Text: " + toot_text)
                 print("------------------------------------------")

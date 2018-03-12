@@ -56,14 +56,26 @@ def process_rdd(time, rdd):
 
 
 def send_df_to_dashboard(df):
-    # extract the hashtags from dataframe and convert them into array
-    top_tags = [t.hashtag for t in df.select("hashtag").collect()]
-    # extract the counts from dataframe and convert them into array
-    tags_count = [p.hashtag_count for p in df.select("hashtag_count").collect()]
-    # initialize and send the data through REST API
-    url = 'http://localhost:5001/updateData'
-    request_data = {'label': top_tags, 'data': tags_count}
-    response = requests.post(url, data=request_data)
+    try:
+        # extract the hashtags from dataframe and convert them into array
+        top_tags = [t.hashtag for t in df.select("hashtag").collect()]
+    except:
+        e = sys.exc_info()[0]
+        print("Error61: %s" % e)
+    try:
+        # extract the counts from dataframe and convert them into array
+        tags_count = [p.hashtag_count for p in df.select("hashtag_count").collect()]
+    except:
+        e = sys.exc_info()[0]
+        print("Error62: %s" % e)
+    try:
+        # initialize and send the data through REST API
+        url = 'http://localhost:5001/updateData'
+        request_data = {'label': top_tags, 'data': tags_count}
+        response = requests.post(url, data=request_data)
+    except:
+        e = sys.exc_info()[0]
+        print("Error63: %s" % e)
 
 
 # create spark configuration

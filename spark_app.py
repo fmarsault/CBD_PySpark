@@ -42,7 +42,7 @@ def process_rdd(time, rdd):
         # hashtag_counts_df.show(truncate=False)
         try:
             # Saving selected dataframe on HDFS as a .parquet file
-            hashtag_counts_df.write.save("/user/hadoop2/mostusedtoots.csv", savemode="overwrite", format="csv")
+            hashtag_counts_df.write.mode('overwrite').save("/user/hadoop2/mostusedtoots.csv", format="csv")
         except:
             e = sys.exc_info()[0]
             print("Error5: %s" % e)

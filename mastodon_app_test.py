@@ -8,6 +8,10 @@ import json
 from w3lib.html import replace_entities, replace_tags
 import mastodon
 from mastodon import Mastodon
+from nltk.corpus import stopwords
+import nltk
+
+# nltk.download('stopwords')
 
 # ACCESS_TOKEN = "c51d68a4aec2e06ac669e5d204db26536e23ba70c58eef37f9526679359b3f64"
 # ACCESS_SECRET = ""
@@ -63,9 +67,15 @@ class StreamUpdate(mastodon.StreamListener):
         json_toot = status
         try:
             if status['language'] in ['en', 'fr', 'None', 'es', 'de']:
-                toot_text = str(replace_entities(replace_tags(json_toot['content'])))
+                toot_text = replace_entities(replace_tags(json_toot['content']))
+                stopwords_combined = stopwords.words('english') + stopwords.words('french') + stopwords.words('spanish') \
+                                     + stopwords.words('german')
+                wordsc = [w for w in toot_text.split(" ") if w.lower() not in stopwords_combined]
                 print("Toot Text: " + toot_text)
+                print(wordsc)
                 print("------------------------------------------")
+
+
                 message = toot_text + '\n'
                 # tcp_connection.send(toot_text + '\n')
         except:

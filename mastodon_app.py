@@ -63,12 +63,13 @@ class StreamUpdate(mastodon.StreamListener):
         # print(status)
         json_toot = status
         try:
-            # if status['language'] in ['en', 'fr', 'None', 'es', 'de']:
-            toot_text = replace_entities(replace_tags(json_toot['content']))
-            print("Toot Text: " + toot_text)
-            print("------------------------------------------")
-            message = toot_text + '\n'
-            tcp_connection.sendto(message.encode('utf-8'),("localhost", 9009))
+            if status['language'] in ['en', 'fr', 'None', 'es', 'de']:
+                stopwords_combined = stopwords.words('english') + stopwords.words('french') + stopwords.words('spanish') + stopwords.words('german')
+                toot_text = replace_entities(replace_tags(json_toot['content']))
+                print("Toot Text: " + toot_text)
+                print("------------------------------------------")
+                message = toot_text + '\n'
+                tcp_connection.sendto(message.encode('utf-8'),("localhost", 9009))
         except:
             e = sys.exc_info()[0]
             print("Error: %s" % e)

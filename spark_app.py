@@ -4,8 +4,6 @@
 from pyspark import SparkConf, SparkContext
 from pyspark.streaming import StreamingContext
 from pyspark.sql import Row, SQLContext
-from pyspark.sql.types import *
-from pyspark.sql.functions import udf
 import sys
 import requests
 from nltk.corpus import stopwords
@@ -54,17 +52,11 @@ def process_rdd(time, rdd):
             print("Error4: %s" % e)
         try:
             # get the top 10 hashtags from the table using SQL and print them
-            f = udf(lambda x: x.encode('utf-8'), StringType())
-            # hashtag_counts_df = sql_context.sql(
-            #     "select hashtag, hashtag_count from hashtags order by hashtag_count desc limit 10".format(hashtags_df))
-            hashtag_counts_df = sql_context.table("hashtags").select(f('hashtag'))
-            hashtag_counts_df.show()
+            hashtag_counts_df = sql_context.sql(
+                "select hashtag, hashtag_count from hashtags order by hashtag_count desc limit 10".format(hashtags_df))
             for x in hashtag_counts_df.collect():
                 print(x)
-
-            # f = udf(lambda x: x.encode('utf-8'), StringType())
-            # sqlContext.table('mytable').select(f("column_containing_unicode_data").show()
-
+            hashtag_counts_df.show(False)
         except:
             e = sys.exc_info()[0]
             print("Error5: %s" % e)

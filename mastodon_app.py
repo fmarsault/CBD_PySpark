@@ -50,7 +50,7 @@ def tcp():
     s.listen(1)
     print("Waiting for TCP connection...")
     conn, addr = s.accept()
-    print("Connected... Starting getting tweets.")
+    print("Connected... Starting getting toots.")
     return conn
 
 

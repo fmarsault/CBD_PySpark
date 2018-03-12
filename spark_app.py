@@ -52,7 +52,7 @@ def process_rdd(time, rdd):
         try:
             # get the top 10 hashtags from the table using SQL and print them
             hashtag_counts_df = sql_context.sql(
-                "select hashtag, hashtag_count from hashtags order by hashtag_count desc limit 10")
+                "select hashtag, hashtag_count from hashtags order by hashtag_count desc limit 10".format('utf-8'))
             hashtag_counts_df.show()
         except:
             e = sys.exc_info()[0]

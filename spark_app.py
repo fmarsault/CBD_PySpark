@@ -34,13 +34,13 @@ def process_rdd(time, rdd):
         hashtags_df = sql_context.createDataFrame(row_rdd)
         # Register the dataframe as table
         hashtags_df.registerTempTable("hashtags")
+        # get the top 10 hashtags from the table using SQL and print them
+        hashtag_counts_df = sql_context.sql(
+            "select hashtag, hashtag_count from hashtags order by hashtag_count desc limit 10")
+        for x in hashtag_counts_df.collect():
+            print(x.hashtag, x.hashtag_count)
+        # hashtag_counts_df.show(truncate=False)
         try:
-            # get the top 10 hashtags from the table using SQL and print them
-            hashtag_counts_df = sql_context.sql(
-                "select hashtag, hashtag_count from hashtags order by hashtag_count desc limit 10")
-            for x in hashtag_counts_df.collect():
-                print(x.hashtag, x.hashtag_count)
-            # hashtag_counts_df.show(truncate=False)
             # Saving selected dataframe on HDFS as a .parquet file
             hashtag_counts_df.write.save("/user/hadoop2/mostusedtoots.csv", savemode="overwrite", format="csv")
         except:

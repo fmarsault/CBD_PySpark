@@ -69,18 +69,18 @@ class StreamUpdate(mastodon.StreamListener):
             if status['language'] in ['en', 'fr', 'None', 'es', 'de']:
                 toot_text = replace_entities(replace_tags(json_toot['content']))
                 stopwords_combined = stopwords.words('english') + stopwords.words('french') + stopwords.words('spanish') \
-                                     + stopwords.words('german')
+                                         + stopwords.words('german')
                 wordsc = [w for w in toot_text.split(" ") if w.lower() not in stopwords_combined]
-                print("Toot Text: " + toot_text)
+                print(f"Toot Text: {toot_text}")
                 print(wordsc)
                 print("------------------------------------------")
 
 
                 message = toot_text + '\n'
-                # tcp_connection.send(toot_text + '\n')
+                        # tcp_connection.send(toot_text + '\n')
         except:
             e = sys.exc_info()[0]
-            print("Error: %s" % e)
+            print(f"Error: {e}")
 
 
 def get_send_toots():

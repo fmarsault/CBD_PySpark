@@ -92,8 +92,8 @@ class StreamListener(object):
                MastodonMalformedEventError('Bad JSON', data),
                err
            )
-           
-        handler_name = 'on_' + name
+
+        handler_name = f'on_{name}'
         try:
             handler = getattr(self, handler_name)
         except AttributeError as err:
@@ -120,9 +120,12 @@ class CallbackStreamListener(StreamListener):
     def on_update(self, status):
         if self.update_handler != None:
             self.update_handler(status)
-        
+
         try:
-            if self.local_update_handler != None and not "@" in status["account"]["acct"]:
+            if (
+                self.local_update_handler != None
+                and "@" not in status["account"]["acct"]
+            ):
                 self.local_update_handler(status)
         except Exception as err:
             six.raise_from(

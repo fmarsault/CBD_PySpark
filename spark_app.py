@@ -24,7 +24,7 @@ def get_sql_context_instance(spark_context):
 
 
 def process_rdd(time, rdd):
-    print("----------- %s -----------" % str(time))
+    print(f"----------- {str(time)} -----------")
     try:
         # Get spark sql singleton context from the current context
         sql_context = get_sql_context_instance(rdd.context)
@@ -45,16 +45,16 @@ def process_rdd(time, rdd):
             hashtag_counts_df.write.mode('overwrite').save("/user/hadoop2/mostusedtoots.csv", format="csv")
         except:
             e = sys.exc_info()[0]
-            print("Error5: %s" % e)
-        # try:
-        #     # call this method to prepare top 10 hashtags DF and send them
-        #     send_df_to_dashboard(hashtag_counts_df)
-        # except:
-        #     e = sys.exc_info()[0]
-        #     print("Error6: %s" % e)
+            print(f"Error5: {e}")
+            # try:
+            #     # call this method to prepare top 10 hashtags DF and send them
+            #     send_df_to_dashboard(hashtag_counts_df)
+            # except:
+            #     e = sys.exc_info()[0]
+            #     print("Error6: %s" % e)
     except:
         e = sys.exc_info()[0]
-        print("ErrorAll: %s" % e)
+        print(f"ErrorAll: {e}")
 
 
 def send_df_to_dashboard(df):
@@ -63,13 +63,13 @@ def send_df_to_dashboard(df):
         top_tags = [t.hashtag for t in df.select("hashtag").collect()]
     except:
         e = sys.exc_info()[0]
-        print("Error61: %s" % e)
+        print(f"Error61: {e}")
     try:
         # extract the counts from dataframe and convert them into array
         tags_count = [p.hashtag_count for p in df.select("hashtag_count").collect()]
     except:
         e = sys.exc_info()[0]
-        print("Error62: %s" % e)
+        print(f"Error62: {e}")
     try:
         # initialize and send the data through REST API
         url = 'http://localhost:5001/updateData'
@@ -77,7 +77,7 @@ def send_df_to_dashboard(df):
         response = requests.post(url, data=request_data)
     except:
         e = sys.exc_info()[0]
-        print("Error63: %s" % e)
+        print(f"Error63: {e}")
 
 
 # create spark configuration
